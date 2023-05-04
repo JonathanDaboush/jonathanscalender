@@ -12,20 +12,21 @@ export function LogInMainShell(props) {
       }
     }, [id, props]);
   
-    if (newUser) {
-      return (
+    if (!newUser) {
+     return (
         <div>
           <LogIn logIn={(e) => setId(e)} />
-          <button onClick={() => setNewUser(!newUser)}>Update User</button>
+          <button onClick={() => setNewUser(!newUser)}>create new User</button>
         </div>
       );
-    } else {
-      return (
+      
+    } else {return (
         <div>
           <CreateNewUser update={()=>{setCounter(counter++)}}/>
           <button onClick={() => setNewUser(!newUser)}>Sign In</button>
         </div>
       );
+       
     }
   }
   

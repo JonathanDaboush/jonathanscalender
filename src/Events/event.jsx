@@ -11,50 +11,60 @@ export function Event(props) {
   let submit = async(event) => {
     let path='http://localhost:8080/event/';
     if(props.e.id===undefined){
-
-        event.preventDefault();
-      await  axios.post(path, {
-        name:name,description:description,description:description,categoryId:category
-              })
-            .then(res => {
-               
-            }).catch(
-            function (error) {
-            console.log(error.toString());
-            });
-    }
-    else{
-        path+="/exist";
-        event.preventDefault();
-        axios.post(
-            path,{ id: props.e.id ,name:name,description:description,description:description,categoryId:category})
-            .then(res => {
-              
-            }).catch(
-            function (error) {
-            console.log(error);
-            });
+      event.preventDefault();
+      await fetch(path, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ name, description, categoryId: category })
+      })
+        .then(res => {
+          // handle response
+        })
+        .catch(function (error) {
+          console.log(error.toString());
+        });
+    } else {
+      path += "/exist";
+      event.preventDefault();
+      fetch(path, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ id: props.e.id, name, description, categoryId: category })
+      })
+        .then(res => {
+          // handle response
+        })
+        .catch(function (error) {
+          console.log(error);
+        });
     }
   };
-let initialize=async()=>{
+  
+  let initialize = async() => {
     if(props.e){
-        setCategory(props.e.category.id);
-        setDateOfEvent(props.e.dateOfEvent);
-        setDescription(props.e.description);
-        setName(props.e.name);
+      setCategory(props.e.category.id);
+      setDateOfEvent(props.e.dateOfEvent);
+      setDescription(props.e.description);
+      setName(props.e.name);
     }
-}
-useEffect(initialize, []);
-
- let Remove=async(event)=>{
-   
-    await axios.delete('http://localhost:8080/event/'+props.e.id).catch(
-        function (error) {
-            console.log(error);
-        });
+  }
+  
+  useEffect(initialize, []);
+  
+  let Remove = async(event) => {
+    await fetch('http://localhost:8080/event/'+props.e.id, {
+      method: 'DELETE',
+    })
+      .catch(function (error) {
+        console.log(error);
+      });
     props.update();
-}
-
+  }
+  
   let handleChange = (event) => {
     const selectedId = event.target.value;
     setCategory(selectedId);

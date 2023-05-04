@@ -5,44 +5,47 @@ import JSOG from "jsog";
 export function CreateNewUser(props){
     let [email,setEmail]=useState("");
     let [password,setPassword]=useState("");
-    let submit=async()=>{
-let isTrue=false;
-            try{
-                let user;
-                let path = 'http://localhost:8080/user/getByEmail'+email;
-                await axios
-                .get(path)
-                .then((res) => {
-                  let target = "";
-                  target = JSOG.stringify(res.data);
-                  let newObject = JSOG.parse(target);
-                  user=newObject;
-                })
-                .catch(function (error) {
-                  console.log(error);
-                });
-                if(user.id){
-                    isTrue=true;}
-            }
-            catch{
-                
-            }
-            if(isTrue){
-            let path = 'http://localhost:8080/user/';
-            axios.post(
-                path,{ email:email,password:password})
-              .then((res) => {
-
-              })
-              .catch(function (error) {
-                console.log(error);
-              });
-           props.update(); }
-           else{
-            alert("account with said email already exists.");
-           }
+    let submit = async () => {
+      let isTrue = false;
+      try {
+        let user;
+        let path = 'http://localhost:8080/user/getByEmail/' + email;
+        let response = await fetch(path);
+        let data = await response.json();
+        let target = "";
+        target = JSOG.stringify(data);
+        let newObject = JSOG.parse(target);
+        user = newObject;
+        if (user && user.id != "") {
+          isTrue = true;
+        }
+      } catch (error) {
         
+        console.error(error);
+      }
+      if (!isTrue) {
+        let path = 'http://localhost:8080/user';
+        try {
+          let response = await fetch(path, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ email, password })
+          });
+          // handle response
+        } catch (error) {
+          
+          console.log("No response received.");
+        }
+    
+        props.update();
+      } else {
+        alert("account with said email already exists.");
+      }
     }
+    
+    
     return(
             <form onSubmit={submit}>
             <div className="form-group row">
