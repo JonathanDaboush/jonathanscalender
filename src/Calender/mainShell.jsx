@@ -19,7 +19,7 @@ function targetDate(date){
 
 if(month!=-1&&edit==false){
     return(<div>
-        <div>{monthNames[month]},{year}</div>
+        <div>{monthNames[month-1]},{year}</div>
         <Calender year={year} month={month} getDateTarget={(e)=>{targetDate(e)}} />
         <button onClick={()=>{setEdit(true)}}>edit</button>
     </div>)}

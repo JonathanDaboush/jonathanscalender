@@ -48,11 +48,12 @@ let getList = async () => {
 
   return (
     <>
+    <Event categories={categories} userId={props.id} dateOf={props.date} update={()=>(setCounter(counter++))}/>
       {events.map((e, i) => {
         return (
           <div key={i}>
             <div>
-              <Event categories={categories} event={e} update={()=>(setCounter(counter++))}/>
+              <Event categories={categories} userId={props.id} event={e} />
             </div>
           </div>
         );

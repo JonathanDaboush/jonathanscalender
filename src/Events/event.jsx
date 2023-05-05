@@ -7,17 +7,22 @@ export function Event(props) {
   let [dateOfEvent, setDateOfEvent] = useState(new Date());
   let [name, setName] = useState("");
   let [description, setDescription] = useState("");
-
+let [user,setUser]=useState(0);
   let submit = async(event) => {
-    let path='http://localhost:8080/event/';
-    if(props.e.id===undefined){
-      event.preventDefault();
+    event.preventDefault(); 
+    let path='http://localhost:8080/event';
+    let userId=props.userId;
+    let categoryId=category;
+    if(props.e===undefined){
+       // Check if event exists before calling preventDefault()
+     
+     let dateOfEvent=props.dateOf;
       await fetch(path, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify({ name, description, categoryId: category })
+        body: JSON.stringify({ name,userId, description, categoryId,dateOfEvent })
       })
         .then(res => {
           // handle response
@@ -27,13 +32,14 @@ export function Event(props) {
         });
     } else {
       path += "/exist";
-      event.preventDefault();
+      let id=props.e.id;
+       // Check if event exists before calling preventDefault()
       fetch(path, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify({ id: props.e.id, name, description, categoryId: category })
+        body: JSON.stringify({ id,userId,  name, description, categoryId ,dateOfEvent })
       })
         .then(res => {
           // handle response
@@ -41,11 +47,12 @@ export function Event(props) {
         .catch(function (error) {
           console.log(error);
         });
-    }
+    } 
   };
   
+  
   let initialize = async() => {
-    if(props.e){
+    if(props.e!=undefined){
       setCategory(props.e.category.id);
       setDateOfEvent(props.e.dateOfEvent);
       setDescription(props.e.description);
@@ -53,7 +60,7 @@ export function Event(props) {
     }
   }
   
-  useEffect(initialize, []);
+  useEffect(()=>{initialize();return () => {}} , []);
   
   let Remove = async(event) => {
     await fetch('http://localhost:8080/event/'+props.e.id, {
@@ -62,7 +69,6 @@ export function Event(props) {
       .catch(function (error) {
         console.log(error);
       });
-    props.update();
   }
   
   let handleChange = (event) => {
@@ -70,7 +76,7 @@ export function Event(props) {
     setCategory(selectedId);
   };
 
-  if (props.e.id) {
+  if (props.e && props.e.id !=undefined) {
     return (
       <div>
         <div>
@@ -80,15 +86,15 @@ export function Event(props) {
                 Date Of Event:
               </label>
               <div className="col-sm-10">
-                <input
+              <input
                   type="date"
                   id="dateOfEvent"
                   className="dateOfEvent"
                   onChange={(e) => {
-                    setDateOfEvent(e.target.value);
+                      setDateOfEvent(e.target.value);
                   }}
-                  value={dateOfEvent}
-                />
+                  value={dateOfEvent.toISOString().substring(0, 10)}
+              />
               </div>
             </div>
             <div className="form-group row">
@@ -157,15 +163,7 @@ export function Event(props) {
                 Date Of Event:
               </label>
               <div className="col-sm-10">
-                <input
-                  type="date"
-                  id="dateOfEvent"
-                  className="dateOfEvent"
-                  onChange={(e) => {
-                    setDateOfEvent(e.target.value);
-                  }}
-                  value={dateOfEvent}
-                />
+                {props.dateOf}
               </div>
             </div>
             <div className="form-group row">
