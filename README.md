@@ -1,3 +1,5 @@
+This project requires you to start a database in mysql called my calender then run the backend and finally run the frontend. I stared my password for sql on application.properties please replace username and password with your mysql username and password.
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
