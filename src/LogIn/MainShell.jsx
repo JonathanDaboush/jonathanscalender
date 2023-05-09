@@ -12,7 +12,7 @@ export function LogInMainShell(props) {
       }
     }, [id, props]);
   
-    if (!newUser) {
+    if (!newUser ) {
      return (
         <div>
           <LogIn logIn={(e) => setId(e)} />

@@ -5,7 +5,7 @@ export function MainCalenderPage(props){
     let [date,setDate]=useState(new Date().toISOString().slice(0, 10) );
     
     function targetDate(e){
-      setDate(e);
+      setDate(e.toISOString().slice(0, 10));
     }
   
     
